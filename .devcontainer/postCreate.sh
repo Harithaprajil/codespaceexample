@@ -1,0 +1,1 @@
+cd reduxecommerce && npm install
