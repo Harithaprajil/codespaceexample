@@ -12,7 +12,17 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
         libssl-dev \
         wget
 
+# Install NVM (Node Version Manager)
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+# Set NVM and Node.js environment variables
+ENV NVM_DIR=/root/.nvm
+ENV NODE_VERSION=18.0.0
+RUN ["/bin/bash", "-c", "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"]
+
+# Set the default shell to bash and ensure NVM is loaded
 SHELL ["/bin/bash", "--login", "-c"]
-ARG NODE_VERSION=18
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-RUN nvm install $NODE_VERSION
+RUN echo "source $NVM_DIR/nvm.sh" >> /root/.bashrc
+
+# Verify installation
+CMD ["node", "--version"]
